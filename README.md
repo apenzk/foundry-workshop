@@ -369,20 +369,17 @@ With OpenZeppelin Contracts installed, let's create a new file named `ERC721.sol
 pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract DevconPanda is ERC721URIStorage {
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+    uint256 private _tokenIds;
 
     constructor() ERC721("DevconPanda", "DCP") {}
 
     function mint(address user, string memory tokenURI) public returns (uint256) {
-        uint256 newItemId = _tokenIds.current();
-        _mint(user, newItemId);
+        uint256 newItemId = _tokenIds;
+        _safeMint(user, newItemId);
         _setTokenURI(newItemId, tokenURI);
-
-        _tokenIds.increment();
+        _tokenIds++;
         return newItemId;
     }
 }
